@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LIBERAL</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <header class="hero">
+    <div>
+      <div class="brand">LIBERAL</div>
+      <h1>Премиум-панель для Telegram-магазина</h1>
+      <p class="hero-text">Вход по API-ключу, баланс, курс Stars, проверка username, покупка Stars и Premium, просмотр заказов и NFT.</p>
+    </div>
+    <div class="hero-badge">Black • Gold • WebApp</div>
+  </header>
+
+  <main class="container">
+    <section class="card login-card" id="loginCard">
+      <div class="card-title-row">
+        <h2>Вход по API</h2>
+        <span class="pill">LIBERAL ACCESS</span>
+      </div>
+      <p class="muted">API-ключ работает как вход в приложение. Ключ не сохраняется на сервере, только в браузере пользователя.</p>
+      <label class="label">API Key</label>
+      <input id="apiKey" class="input" type="password" placeholder="Вставь свой API-ключ" />
+      <div class="actions-row">
+        <button class="gold-btn" id="loginBtn">Войти</button>
+        <button class="ghost-btn" id="clearBtn">Очистить</button>
+      </div>
+      <div class="status" id="authStatus">Ожидание входа…</div>
+    </section>
+
+    <section class="dashboard hidden" id="dashboard">
+      <div class="grid two">
+        <section class="card">
+          <div class="card-title-row">
+            <h2>Профиль</h2>
+            <span class="pill">CLIENT</span>
+          </div>
+          <div class="profile-box">
+            <div class="metric">
+              <span>ID</span>
+              <strong id="userId">—</strong>
+            </div>
+            <div class="metric">
+              <span>Username</span>
+              <strong id="username">—</strong>
+            </div>
+            <div class="metric gold">
+              <span>Баланс</span>
+              <strong id="balance">—</strong>
+            </div>
+          </div>
+          <div class="actions-row">
+            <button class="gold-btn" id="refreshBalanceBtn">Обновить баланс</button>
+            <button class="ghost-btn" id="logoutBtn">Выйти</button>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-title-row">
+            <h2>Курс Telegram Stars</h2>
+            <span class="pill">RATE</span>
+          </div>
+          <div class="profile-box compact">
+            <div class="metric">
+              <span>Цена за 1 звезду</span>
+              <strong id="starPrice">—</strong>
+            </div>
+            <div class="metric">
+              <span>Мин. кол-во</span>
+              <strong id="starMin">—</strong>
+            </div>
+            <div class="metric">
+              <span>Макс. кол-во</span>
+              <strong id="starMax">—</strong>
+            </div>
+            <div class="metric">
+              <span>Статус</span>
+              <strong id="starsEnabled">—</strong>
+            </div>
+          </div>
+          <button class="gold-btn full" id="loadRateBtn">Обновить курс</button>
+        </section>
+      </div>
+
+      <div class="grid two">
+        <section class="card">
+          <div class="card-title-row">
+            <h2>Проверка получателя</h2>
+            <span class="pill">CHECK</span>
+          </div>
+          <label class="label">Username</label>
+          <input id="checkUsername" class="input" type="text" placeholder="username или @username" />
+          <label class="label">Тип</label>
+          <select id="checkType" class="input">
+            <option value="stars">Stars</option>
+            <option value="premium">Premium</option>
+          </select>
+          <label class="label">Months для Premium</label>
+          <select id="checkMonths" class="input">
+            <option value="">Не нужно</option>
+            <option value="3">3</option>
+            <option value="6">6</option>
+            <option value="12">12</option>
+          </select>
+          <button class="gold-btn full" id="checkBtn">Проверить</button>
+          <pre class="result-box" id="checkResult">Нет данных</pre>
+        </section>
+
+        <section class="card">
+          <div class="card-title-row">
+            <h2>Купить Stars</h2>
+            <span class="pill">ORDER</span>
+          </div>
+          <label class="label">Username</label>
+          <input id="starsUsername" class="input" type="text" placeholder="username без ошибок" />
+          <label class="label">Количество звёзд</label>
+          <input id="starsQuantity" class="input" type="number" min="50" max="10000" value="100" />
+          <button class="gold-btn full" id="buyStarsBtn">Создать заказ</button>
+          <pre class="result-box" id="starsResult">Нет данных</pre>
+        </section>
+      </div>
+
+      <div class="grid two">
+        <section class="card">
+          <div class="card-title-row">
+            <h2>Купить Premium</h2>
+            <span class="pill">PREMIUM</span>
+          </div>
+          <label class="label">Username</label>
+          <input id="premiumUsername" class="input" type="text" placeholder="username" />
+          <label class="label">Срок</label>
+          <select id="premiumMonths" class="input">
+            <option value="3">3 месяца</option>
+            <option value="6">6 месяцев</option>
+            <option value="12">12 месяцев</option>
+          </select>
+          <button class="gold-btn full" id="buyPremiumBtn">Создать заказ</button>
+          <pre class="result-box" id="premiumResult">Нет данных</pre>
+        </section>
+
+        <section class="card">
+          <div class="card-title-row">
+            <h2>Информация о заказе</h2>
+            <span class="pill">ORDER INFO</span>
+          </div>
+          <label class="label">ID заказа</label>
+          <input id="orderId" class="input" type="number" min="1" placeholder="Например 42" />
+          <button class="gold-btn full" id="orderInfoBtn">Проверить заказ</button>
+          <pre class="result-box" id="orderResult">Нет данных</pre>
+        </section>
+      </div>
+
+      <section class="card">
+        <div class="card-title-row">
+          <h2>NFT коллекции</h2>
+          <span class="pill">NFT</span>
+        </div>
+        <p class="muted">Ниже можно быстро загрузить список коллекций для покупки NFT. Это базовый блок, который уже подключён к API.</p>
+        <div class="actions-row">
+          <button class="gold-btn" id="loadCollectionsBtn">Загрузить коллекции</button>
+        </div>
+        <pre class="result-box large" id="collectionsResult">Нет данных</pre>
+      </section>
+    </section>
+  </main>
+
+  <script src="/script.js"></script>
+</body>
+</html>
