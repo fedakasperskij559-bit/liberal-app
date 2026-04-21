@@ -1,9 +1,11 @@
+const BACKEND_URL = 'https://liberal-app.onrender.com';
 const STORAGE_KEY = 'liberal_api_key';
 
 const $ = (id) => document.getElementById(id);
 
 function setStatus(text, type = 'muted') {
   const el = $('authStatus');
+  if (!el) return;
   el.textContent = text;
   el.className = `status ${type}`;
 }
@@ -24,8 +26,8 @@ function clearToken() {
   sessionStorage.removeItem(STORAGE_KEY);
 }
 
-async function postJSON(url, body) {
-  const response = await fetch(url, {
+async function postJSON(path, body) {
+  const response = await fetch(`${BACKEND_URL}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
@@ -48,9 +50,10 @@ async function postJSON(url, body) {
 function fillProfile(user) {
   $('userId').textContent = user.id ?? '—';
   $('username').textContent = user.username ? '@' + String(user.username).replace(/^@/, '') : '—';
-  $('balance').textContent = typeof user.balance_rub === 'number' || typeof user.balance === 'number'
-    ? `${user.balance_rub ?? user.balance} ₽`
-    : '—';
+  $('balance').textContent =
+    typeof user.balance_rub === 'number' || typeof user.balance === 'number'
+      ? `${user.balance_rub ?? user.balance} ₽`
+      : '—';
 }
 
 async function loginWithToken(token) {
@@ -133,9 +136,9 @@ function logout() {
 
 function bind() {
   $('loginBtn').addEventListener('click', async () => {
+    const token = $('apiKey').value.trim();
     try {
-      const token = $('apiKey').value.trim();
-      if (!token) return setStatus('Вставь API ключ.', 'error');
+      if (!token) throw new Error('Вставь API ключ.');
       await loginWithToken(token);
     } catch (error) {
       setStatus(error.message, 'error');
@@ -143,6 +146,7 @@ function bind() {
   });
 
   $('clearBtn').addEventListener('click', () => {
+    clearToken();
     $('apiKey').value = '';
     setStatus('Поле очищено.');
   });
@@ -220,6 +224,7 @@ function bind() {
 
 async function bootstrap() {
   bind();
+  setStatus('Ожидание входа…');
   const saved = getToken();
   if (!saved) return;
   $('apiKey').value = saved;
@@ -227,6 +232,7 @@ async function bootstrap() {
     await loginWithToken(saved);
   } catch (error) {
     clearToken();
+    $('apiKey').value = '';
     setStatus('Сохранённый ключ больше не работает. Войди заново.', 'error');
   }
 }
