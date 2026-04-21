@@ -28,9 +28,18 @@ app.post("/api/connect-key", async (req, res) => {
       }
     });
 
-    const data = await response.json();
+    let data;
 
-    if (!data.success) {
+try {
+  data = await response.json();
+} catch (e) {
+  return res.json({
+    ok: false,
+    error: "API вернул не JSON (возможно ключ неверный или API недоступен)"
+  });
+}
+
+   if (!data || !data.success)
       return res.json({ ok: false, error: "Неверный API ключ" });
     }
 
