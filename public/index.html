@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LIBERAL</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg"></div>
+  <header>
+    <div class="brand">LIBERAL</div>
+    <div class="pill">Black • Gold • WebApp</div>
+  </header>
+  <main>
+    <section class="hero">
+      <h1>Премиум-панель для Telegram-магазина</h1>
+      <p>Вход по API-ключу, баланс, курс Stars, проверка username, покупка Stars и Premium.</p>
+    </section>
+
+    <section id="loginCard" class="card">
+      <div class="card-head"><h2>Вход по API</h2><span>LIBERAL ACCESS</span></div>
+      <p>API-ключ работает как вход в приложение. Ключ хранится только в браузере пользователя.</p>
+      <label>API Key</label>
+      <input id="apiKey" type="password" placeholder="Вставь свой API-ключ" autocomplete="off" />
+      <div class="actions">
+        <button id="loginBtn" onclick="login()">Войти</button>
+        <button class="ghost" onclick="clearLogin()">Очистить</button>
+      </div>
+      <div id="authStatus" class="status muted">Готов к входу.</div>
+    </section>
+
+    <section id="dashboard" class="hidden">
+      <div class="grid">
+        <div class="card mini"><h3>Профиль</h3><p>ID: <b id="userId">—</b></p><p>Username: <b id="username">—</b></p><p>Баланс: <b id="balance">—</b></p><button onclick="refreshBalance()">Обновить баланс</button><button class="ghost" onclick="logout()">Выйти</button></div>
+        <div class="card mini"><h3>Курс Stars</h3><p>1 ⭐: <b id="starPrice">—</b></p><p>Мин: <b id="starMin">—</b> / Макс: <b id="starMax">—</b></p><p>Статус: <b id="starsEnabled">—</b></p><button onclick="loadStarsRate()">Загрузить курс</button></div>
+      </div>
+
+      <div class="grid">
+        <div class="card"><h3>Проверить username</h3><input id="checkUsername" placeholder="username без @" /><select id="checkType"><option value="stars">Stars</option><option value="premium">Premium</option></select><select id="checkMonths"><option value="3">3 месяца</option><option value="6">6 месяцев</option><option value="12">12 месяцев</option></select><button onclick="checkUsername()">Проверить</button><pre id="checkResult"></pre></div>
+        <div class="card"><h3>Купить Stars</h3><input id="starsUsername" placeholder="username без @" /><input id="starsQuantity" type="number" min="50" placeholder="Количество Stars" /><button onclick="buyStars()">Создать заказ</button><pre id="starsResult"></pre></div>
+      </div>
+
+      <div class="grid">
+        <div class="card"><h3>Купить Telegram Premium</h3><input id="premiumUsername" placeholder="username без @" /><select id="premiumMonths"><option value="3">3 месяца</option><option value="6">6 месяцев</option><option value="12">12 месяцев</option></select><button onclick="buyPremium()">Создать заказ</button><pre id="premiumResult"></pre></div>
+        <div class="card"><h3>Заказ по ID</h3><input id="orderId" type="number" placeholder="ID заказа" /><button onclick="getOrderInfo()">Показать заказ</button><pre id="orderResult"></pre></div>
+      </div>
+    </section>
+  </main>
+  <script src="script.js?v=final3"></script>
+</body>
+</html>
